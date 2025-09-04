@@ -1,0 +1,142 @@
+.company-container {
+  padding: 20px;
+  background-color: #121212;
+  color: #fff;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.top-message,
+.success-message,
+.error-message {
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.success-message {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.error-message {
+  background-color: #e53935;
+  color: #fff;
+}
+
+.add-company-form,
+.search-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.add-company-form input,
+.search-container input {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.add-company-form input:focus,
+.search-container input:focus {
+  box-shadow: 0 0 5px #00bcd4;
+}
+
+.add-company-form button,
+.back-button,
+.edit-btn,
+.save-btn,
+.admin-cancel-btn {
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.add-company-form button {
+  background-color: #00bcd4;
+  color: #fff;
+}
+
+.add-company-form button:hover {
+  background-color: #0097a7;
+}
+
+.back-button {
+  background-color: #757575;
+  color: #fff;
+  margin-top: 20px;
+}
+
+.back-button:hover {
+  background-color: #616161;
+}
+
+.edit-btn {
+  background-color: #ffa000;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background-color: #ff8f00;
+}
+
+.save-btn {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background-color: #388e3c;
+}
+
+.admin-cancel-btn {
+  background-color: #e53935;
+  color: #fff;
+}
+
+.admin-cancel-btn:hover {
+  background-color: #c62828;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th,
+table td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+table th {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-container {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.search-container input {
+  width: 100%;
+  max-width: 400px;
+  background-color: #1e1e1e;
+  color: #fff;
+  font-size: 16px;
+}

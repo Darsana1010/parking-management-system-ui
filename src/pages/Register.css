@@ -1,0 +1,169 @@
+/* Register.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('https://wallpaperaccess.com/full/1255605.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #ffffff;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px;
+  backdrop-filter: blur(10px) brightness(0.9);
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  max-width: 480px;
+  margin: auto;
+}
+
+.container h2 {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 0 0 8px #00c9ff, 0 0 12px #1f1f1f;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form input,
+.form select {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  border: none;
+  padding: 14px 16px;
+  margin: 10px 0;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form input::placeholder {
+  color: #bbb;
+}
+
+.form input:focus,
+.form select:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 5px #00ff9d;
+}
+
+.form select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg fill="white" height="24" viewBox="0 0 24 24" width="24"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+}
+.form select {
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #ffffff; /* Text color white */
+  border: none;
+  padding: 14px 16px;
+  margin: 10px 0;
+  font-size: 1rem;
+  border-radius: 8px;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg fill="white" height="24" viewBox="0 0 24 24" width="24"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form select:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 5px #00ff9d;
+}
+
+.form option {
+  background-color: #1b1f3b;
+  color: #ffffff;
+}
+.back-button {
+  margin-top: 15px;
+  padding: 12px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+ background: linear-gradient(135deg, #06283D, #86b3f7, #47B5FF);
+  color: #fff;
+  box-shadow: 0 0 12px #1363DF, 0 0 15px #06283D inset;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.back-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00e84d, 0 0 30px #012c16 inset;
+}
+
+
+button {
+  margin-top: 20px;
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #1b1f3b, #2d46b9, #3e8ef7);
+  color: #fff;
+  box-shadow: 0 0 12px #2d46b9, 0 0 20px #1b1f3b inset;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #00e676, 0 0 30px #014421 inset;
+}
+
+.info {
+  margin-top: 20px;
+  color: #f5f5f5;
+  font-size: 0.95rem;
+  text-align: center;
+  text-shadow: 0 0 4px #00c9ff;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 30px 20px;
+    border-radius: 10px;
+  }
+
+  .container h2 {
+    font-size: 1.8rem;
+  }
+
+  .form input,
+  .form select {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  button {
+    padding: 12px;
+  }
+}
