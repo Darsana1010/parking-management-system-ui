@@ -193,6 +193,7 @@ const Dashboard = () => {
               <button className="admin-btn" onClick={() => navigate('/companies')}>Manage Companies</button>
               <button className="admin-btn" onClick={() => navigate('/cost-report')}>View Cost Report</button>
               <button className="admin-btn" onClick={() => navigate('/pending-users')}>Pending Users</button>
+              <button className="admin-btn" onClick={() => navigate("/admin-feedback")}>View Feedbacks</button>
             </div>
           )}
 

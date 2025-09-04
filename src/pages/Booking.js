@@ -7,13 +7,14 @@ import "./Booking.css";
 function Booking() {
   const [myBooking, setMyBooking] = useState(null);
   const [arrivalTime, setArrivalTime] = useState("09:00");
+  const [bookingDate, setBookingDate] = useState(""); // date picker value
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // 🔑 Decode user info from token
+  // Decode user info from token
   let userId = null;
   let companyId = null;
   if (token) {
@@ -33,7 +34,6 @@ function Booking() {
       const response = await axios.get(`/api/bookings/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // ✅ Pick the latest confirmed booking (or null if none)
       const confirmed = response.data.find((b) => b.status === "Confirmed");
       setMyBooking(confirmed || null);
     } catch (err) {
@@ -53,15 +53,17 @@ function Booking() {
       setError("User not found in token. Please log in again.");
       return;
     }
+    if (!bookingDate) {
+      setError("Please select a booking date");
+      return;
+    }
     try {
       setError("");
       const payload = {
         userId,
         companyId,
         arrivalTime,
-        bookingDate: new Date(Date.now() + 86400000)
-          .toISOString()
-          .split("T")[0], // tomorrow only
+        bookingDate,
       };
       await axios.post("/api/bookings", payload, {
         headers: { Authorization: `Bearer ${token}` },
@@ -79,13 +81,12 @@ function Booking() {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchBookings(); // refresh
+      fetchBookings();
     } catch (err) {
       setError("Cancel failed");
     }
   };
 
-  // 🔹 Logout handler
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
@@ -93,14 +94,21 @@ function Booking() {
 
   return (
     <div className="booking-container">
-      {/* Top bar with Back + Logout */}
+      {/* Top bar */}
       <div className="top-bar">
         <button className="back-btn" onClick={() => navigate("/dashboard")}>
           ⬅ Back
         </button>
-        <h2>My Parking Booking</h2>
+        <h2>My Booking</h2>
         <button className="logout-btn" onClick={handleLogout}>
           Logout
+        </button>
+      </div>
+
+      {/* Feedback button aligned left */}
+      <div className="feedback-section-left">
+        <button className="feedback-btn" onClick={() => navigate("/feedback")}>
+          💬 Give Feedback
         </button>
       </div>
 
@@ -123,13 +131,18 @@ function Booking() {
           </button>
         </div>
       ) : (
-        <div className="booking-form">
+        <div className="date-time-book">
+          <input
+            type="date"
+            value={bookingDate}
+            onChange={(e) => setBookingDate(e.target.value)}
+          />
           <input
             type="time"
             value={arrivalTime}
             onChange={(e) => setArrivalTime(e.target.value)}
           />
-          <button onClick={createBooking}>Book for Tomorrow</button>
+          <button onClick={createBooking}>Book</button>
         </div>
       )}
 

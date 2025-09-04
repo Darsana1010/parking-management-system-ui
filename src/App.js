@@ -10,6 +10,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CompanyRegistration from "./pages/Company";
 import CostReport from "./pages/CostReport";
 import PendingUsers from "./pages/PendingUsers";
+import Feedback from "./pages/Feedback";
+import AdminFeedback from './pages/AdminFeedback';
+
 
 function App() {
   return (
@@ -24,6 +27,8 @@ function App() {
         <Route path="/companies" element={<CompanyRegistration />} />
         <Route path="/cost-report" element={<CostReport />} />
         <Route path="/pending-users" element={<PendingUsers />} />
+        <Route path="/feedback" element={<Feedback />} />
+        <Route path="/admin-feedback" element={<AdminFeedback />} /> 
       </Routes>
     </Router>
   );
