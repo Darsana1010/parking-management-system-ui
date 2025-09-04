@@ -18,7 +18,7 @@ function AdminDashboard() {
     fetchBookings();
   }, []);
 
-  // Fetch only Confirmed bookings that haven't exited
+  // Fetch only today's Confirmed bookings that haven't exited
   const fetchBookings = async () => {
     try {
       setLoading(true);
@@ -26,11 +26,22 @@ function AdminDashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const activeBookings = response.data.filter(
-        (b) => b.status === "Confirmed" && !b.hasLeft
-      );
-      setBookings(activeBookings);
+      const now = new Date();
+
+      const todaysBookings = response.data.filter((b) => {
+        if (b.status !== "Confirmed" || b.hasLeft) return false;
+
+        const bookingDate = new Date(b.bookingDate);
+        return (
+          bookingDate.getFullYear() === now.getFullYear() &&
+          bookingDate.getMonth() === now.getMonth() &&
+          bookingDate.getDate() === now.getDate()
+        );
+      });
+
+      setBookings(todaysBookings);
     } catch (err) {
+      console.error(err);
       setError("Failed to fetch bookings");
     } finally {
       setLoading(false);
@@ -50,6 +61,7 @@ function AdminDashboard() {
         prev.map((b) => (b.bookingId === id ? { ...b, hasArrived: true } : b))
       );
     } catch (err) {
+      console.error(err);
       setError("Failed to update arrival status");
     }
   };
@@ -63,31 +75,31 @@ function AdminDashboard() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Remove exited booking immediately
       setBookings((prev) => prev.filter((b) => b.bookingId !== id));
     } catch (err) {
+      console.error(err);
       setError("Failed to update exit status");
     }
   };
 
-  // Highlight overdue bookings
+  // Highlight overdue bookings (current time past arrivalTime but not yet arrived)
   const isOverdue = (b) => {
     if (b.hasArrived) return false;
     const now = new Date();
-    const bookingDateTime = new Date(b.bookingDate + "T" + b.arrivalTime);
+    const bookingDateTime = new Date(`${b.bookingDate}T${b.arrivalTime}`);
     return now > bookingDateTime;
   };
 
   return (
     <div className="admin-dashboard">
-      <h2>All Current Bookings</h2>
+      <h2>Today's Bookings</h2>
 
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p className="error">{error}</p>
       ) : bookings.length === 0 ? (
-        <p>No active bookings</p>
+        <p>No active bookings for today</p>
       ) : (
         <table className="bookings-table">
           <thead>
@@ -113,7 +125,10 @@ function AdminDashboard() {
                 <td>{b.status}</td>
                 <td>
                   {!b.hasArrived ? (
-                    <button className="arrived-btn" onClick={() => markArrival(b.bookingId)}>
+                    <button
+                      className="arrived-btn"
+                      onClick={() => markArrival(b.bookingId)}
+                    >
                       Mark Arrived
                     </button>
                   ) : (
@@ -121,11 +136,14 @@ function AdminDashboard() {
                   )}
                 </td>
                 <td>
-                  {b.hasArrived && !b.hasExited ? (
-                    <button className="exit-btn" onClick={() => markExit(b.bookingId)}>
+                  {b.hasArrived && !b.hasLeft ? (
+                    <button
+                      className="exit-btn"
+                      onClick={() => markExit(b.bookingId)}
+                    >
                       Mark Exit
                     </button>
-                  ) : b.hasExited ? (
+                  ) : b.hasLeft ? (
                     <span>Exited</span>
                   ) : (
                     <span>-</span>

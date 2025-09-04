@@ -14,7 +14,7 @@
   background-color: #616161;
 }
 .overdue {
-  background-color: #ffe6e6; /* light red */
+  background-color: #f57615; /* light red */
 }
 .top-bar {
   display: flex;
