@@ -27,7 +27,9 @@ const CostReport = () => {
       const response = await axios.get("http://localhost:8080/api/companies", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCompanies(response.data);
+      // 🔴 Exclude company with ID 1 (guest company)
+      const filtered = response.data.filter((c) => c.companyId !== 1);
+      setCompanies(filtered);
     } catch (err) {
       console.error("Error fetching companies", err);
     }
@@ -241,16 +243,17 @@ const CostReport = () => {
           ))}
         </tbody>
       </table>
-          {/* Go to Dashboard Button */}
-    <div style={{ marginTop: "20px" }}>
-      <button
-        className="back-button"
-        onClick={() => navigate("/dashboard")}
-        style={{ padding: "10px 20px", cursor: "pointer" }}
-      >
-        ← Go to Dashboard
-      </button>
-    </div>
+      
+      {/* Go to Dashboard Button */}
+      <div style={{ marginTop: "20px" }}>
+        <button
+          className="back-button"
+          onClick={() => navigate("/reports")}
+          style={{ padding: "10px 20px", cursor: "pointer" }}
+        >
+          ← Go to Report Dashboard
+        </button>
+      </div>
     </div>
   );
 };

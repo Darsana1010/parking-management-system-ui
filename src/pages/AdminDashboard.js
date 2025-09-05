@@ -22,7 +22,7 @@ function AdminDashboard() {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8080/api/bookings/all", {
+      const response = await axios.get("http://localhost:8080/api/bookings/confirmed", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

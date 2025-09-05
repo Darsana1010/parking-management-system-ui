@@ -1,34 +1,52 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import "./Booking.css";
 
 function Booking() {
   const [myBooking, setMyBooking] = useState(null);
   const [arrivalTime, setArrivalTime] = useState("09:00");
-  const [bookingDate, setBookingDate] = useState(""); // date picker value
+  const [bookingDate, setBookingDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // Decode user info from token
-  let userId = null;
-  let companyId = null;
-  if (token) {
+  // Decode token to get userId
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     try {
       const decoded = jwtDecode(token);
-      userId = decoded.userId || decoded.sub || null;
-      companyId = decoded.companyId || null;
+      const userId = decoded.userId || decoded.sub;
+      fetchUserDetails(userId, token);
     } catch (err) {
       console.error("Failed to decode token", err);
+      setError("Invalid token. Please log in again.");
     }
-  }
+  }, [token, navigate]);
 
-  const fetchBookings = async () => {
-    if (!userId) return;
+  // Fetch full user details including companyId
+  const fetchUserDetails = async (userId, token) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(response.data);
+      fetchBookings(response.data.userId); // fetch bookings after user details are fetched
+    } catch (err) {
+      console.error("Error fetching user details", err);
+      setError("Failed to load user details");
+    }
+  };
+
+  // Fetch bookings for this user
+  const fetchBookings = async (userId) => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/bookings/${userId}`, {
@@ -38,37 +56,34 @@ function Booking() {
       setMyBooking(confirmed || null);
     } catch (err) {
       setMyBooking(null);
-      setError("No Bookings");
+      setError("No bookings found");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchBookings();
-  }, []);
-
   const createBooking = async () => {
-    if (!userId) {
-      setError("User not found in token. Please log in again.");
+    if (!user) {
+      setError("User not loaded yet. Please wait.");
       return;
     }
     if (!bookingDate) {
       setError("Please select a booking date");
       return;
     }
+
     try {
       setError("");
       const payload = {
-        userId,
-        companyId,
+        userId: user.userId,
+        companyId: user.companyId,
         arrivalTime,
         bookingDate,
       };
       await axios.post("/api/bookings", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      fetchBookings(); // refresh current booking
+      fetchBookings(user.userId); // refresh bookings
     } catch (err) {
       setError(err.response?.data || "Booking failed");
     }
@@ -76,12 +91,10 @@ function Booking() {
 
   const cancelBooking = async (id) => {
     try {
-      await axios.post(
-        `/api/bookings/${id}/cancel`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      fetchBookings();
+      await axios.post(`/api/bookings/${id}/cancel`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchBookings(user.userId); // refresh bookings
     } catch (err) {
       setError("Cancel failed");
     }
@@ -94,41 +107,27 @@ function Booking() {
 
   return (
     <div className="booking-container">
-      {/* Top bar */}
       <div className="top-bar">
-        <button className="back-btn" onClick={() => navigate("/dashboard")}>
-          ⬅ Back
-        </button>
+        <button className="back-btn" onClick={() => navigate("/dashboard")}>⬅ Back</button>
         <h2>My Booking</h2>
-        <button className="logout-btn" onClick={handleLogout}>
-          Logout
-        </button>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
+      <p className="info-note">
+        ⚠ You cannot book for the same date.
+      </p>
+            <p className="info-note">
+        ⚠ You can only book for the next two days.
+      </p>
 
-      {/* Feedback button aligned left */}
-      <div className="feedback-section-left">
-        <button className="feedback-btn" onClick={() => navigate("/feedback")}>
-          💬 Give Feedback
-        </button>
-      </div>
-
-      {/* Booking section */}
       {loading ? (
         <p>Loading...</p>
       ) : myBooking ? (
         <div className="current-booking">
           <p>
             ✅ You have a booking: <br />
-            <strong>Slot #{myBooking.slotNumber}</strong> on{" "}
-            <strong>{myBooking.bookingDate}</strong> at{" "}
-            <strong>{myBooking.arrivalTime}</strong>
+            <strong>Slot #{myBooking.slotNumber}</strong> on <strong>{myBooking.bookingDate}</strong> at <strong>{myBooking.arrivalTime}</strong>
           </p>
-          <button
-            className="cancel-btn"
-            onClick={() => cancelBooking(myBooking.bookingId)}
-          >
-            Cancel Booking
-          </button>
+          <button className="cancel-btn" onClick={() => cancelBooking(myBooking.bookingId)}>Cancel Booking</button>
         </div>
       ) : (
         <div className="date-time-book">

@@ -190,10 +190,10 @@ const Dashboard = () => {
           {user.role === 'Admin' && (
             <div className="admin-actions">
               <button className="admin-btn" onClick={() => navigate('/admin-dashboard')}>View All Bookings</button>
+                  <button className="admin-btn" onClick={() => navigate('/pending-users')}>Pending Users</button>
               <button className="admin-btn" onClick={() => navigate('/companies')}>Manage Companies</button>
-              <button className="admin-btn" onClick={() => navigate('/cost-report')}>View Cost Report</button>
-              <button className="admin-btn" onClick={() => navigate('/pending-users')}>Pending Users</button>
               <button className="admin-btn" onClick={() => navigate("/admin-feedback")}>View Feedbacks</button>
+               <button className="admin-btn" onClick={() => navigate('/reports')}>View Reports</button>
             </div>
           )}
 

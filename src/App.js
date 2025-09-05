@@ -12,6 +12,9 @@ import CostReport from "./pages/CostReport";
 import PendingUsers from "./pages/PendingUsers";
 import Feedback from "./pages/Feedback";
 import AdminFeedback from './pages/AdminFeedback';
+import ReportDashboard from './pages/ReportDashboard';
+import UsageReport from './pages/UsageReport';
+
 
 
 function App() {
@@ -25,10 +28,12 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/companies" element={<CompanyRegistration />} />
-        <Route path="/cost-report" element={<CostReport />} />
         <Route path="/pending-users" element={<PendingUsers />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/admin-feedback" element={<AdminFeedback />} /> 
+        <Route path="/reports" element={<ReportDashboard />} />
+        <Route path="/reports/cost" element={<CostReport />} />
+        <Route path="/reports/usage" element={<UsageReport />} />
       </Routes>
     </Router>
   );

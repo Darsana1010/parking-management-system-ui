@@ -88,6 +88,11 @@
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
+.info-note {
+  color: #007bff; /* blue info color */
+  font-size: 0.95rem;
+  margin: 10px 0;
+}
 
 .cancel-btn:hover {
   background-color: #c62828;
