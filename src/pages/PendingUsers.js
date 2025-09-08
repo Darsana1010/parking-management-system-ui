@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Dashboard.css';
+import './PendingUser.css';
 import { useNavigate } from 'react-router-dom';
 
 const PendingUsers = () => {
   const [pendingUsers, setPendingUsers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [actionType, setActionType] = useState(null); // "approve" or "reject"
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
@@ -26,28 +27,37 @@ const PendingUsers = () => {
     }
   };
 
-  const confirmApprove = (u) => {
+  const confirmAction = (u, type) => {
     setSelectedUser({ userId: u.userId ?? u.id, name: u.name });
+    setActionType(type);
     setModalOpen(true);
   };
 
-  const handleApprove = async () => {
-    if (!selectedUser) return;
+  const handleAction = async () => {
+    if (!selectedUser || !actionType) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:8080/api/users/${selectedUser.userId}/approve`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const endpoint =
+        actionType === 'approve'
+          ? `http://localhost:8080/api/users/${selectedUser.userId}/approve`
+          : `http://localhost:8080/api/users/${selectedUser.userId}/reject`;
+
+      await axios.patch(endpoint, {}, { headers: { Authorization: `Bearer ${token}` } });
+
       setPendingUsers(prev => prev.filter(u => (u.userId ?? u.id) !== selectedUser.userId));
-      setMessage(`User ${selectedUser.name} approved successfully.`);
+
+      setMessage(
+        `User ${selectedUser.name} ${actionType === 'approve' ? 'approved' : 'rejected'} successfully.`
+      );
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
-      console.error('Error approving user', err);
-      setMessage('Failed to approve user.');
+      console.error(`Error during ${actionType}`, err);
+      setMessage(`Failed to ${actionType} user.`);
       setTimeout(() => setMessage(''), 3000);
     } finally {
       setModalOpen(false);
       setSelectedUser(null);
+      setActionType(null);
     }
   };
 
@@ -68,8 +78,9 @@ const PendingUsers = () => {
               <th>Employer ID</th>
               <th>Company ID</th>
               <th>Vehicle Number</th>
+              <th>Phone</th>
               <th>Status</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -84,9 +95,23 @@ const PendingUsers = () => {
                   <td>{u.employerId}</td>
                   <td>{u.companyId}</td>
                   <td>{u.vehicleNumber}</td>
+                  <td>{u.phoneNumber}</td>
                   <td>{u.registrationStatus}</td>
                   <td>
-                    <button className="approve-btn" onClick={() => confirmApprove(u)}>Approve</button>
+                    <div className="action-buttons">
+                      <button
+                        className="approve-btn"
+                        onClick={() => confirmAction(u, 'approve')}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        className="reject-btn"
+                        onClick={() => confirmAction(u, 'reject')}
+                      >
+                        Reject
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );
@@ -100,12 +125,30 @@ const PendingUsers = () => {
       {modalOpen && selectedUser && (
         <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
           <div className="modal">
-            <h3 id="confirmTitle">Confirm Approval</h3>
-            <p>Are you sure you want to approve the user:</p>
-            <p className="modal-username"><strong>{selectedUser.name}</strong> (ID: {selectedUser.userId})</p>
+            <h3 id="confirmTitle">
+              Confirm {actionType === 'approve' ? 'Approval' : 'Rejection'}
+            </h3>
+            <p>Are you sure you want to {actionType} the user:</p>
+            <p className="modal-username">
+              <strong>{selectedUser.name}</strong> (ID: {selectedUser.userId})
+            </p>
             <div className="modal-actions">
-              <button className="confirm-btn" onClick={handleApprove}>Confirm</button>
-              <button className="cancel-btn" onClick={() => { setModalOpen(false); setSelectedUser(null); }}>Cancel</button>
+              <button
+                className={actionType === 'approve' ? 'approve-btn' : 'reject-btn'}
+                onClick={handleAction}
+              >
+                Confirm
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setModalOpen(false);
+                  setSelectedUser(null);
+                  setActionType(null);
+                }}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

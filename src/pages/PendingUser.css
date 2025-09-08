@@ -1,0 +1,66 @@
+/* Keep actions side by side */
+.pending-users-container .action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* === Approve Button (green) === */
+.pending-users-container .approve-btn {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  transition: background-color 0.2s ease;
+}
+.pending-users-container .approve-btn:hover {
+  background-color: #218838 !important;
+}
+
+/* === Reject Button (red) === */
+.pending-users-container .action-buttons .reject-btn {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  transition: background-color 0.2s ease;
+}
+.pending-users-container .reject-btn:hover {
+  background-color: #c82333 !important;
+}
+
+/* === Cancel Button (neutral in modal) === */
+.pending-users-container .cancel-btn {
+  background: #6c757d !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+}
+.pending-users-container .cancel-btn:hover {
+  background: #5a6268 !important;
+}
+
+/* === Back Button (fixed blue bottom-right) === */
+.pending-users-container .back-button {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1000 !important;
+  padding: 10px 20px !important;
+  background-color: #007bff !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+}
+.pending-users-container .back-button:hover {
+  background-color: #0056b3 !important;
+}
