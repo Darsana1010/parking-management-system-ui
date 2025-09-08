@@ -40,27 +40,62 @@
   background: #357abd;
 }
 
-/* Feedback button (left) */
-.feedback-section-left {
+/* Centered booking form: date, time, book button */
+.date-time-book-centered {
   display: flex;
-  justify-content: flex-start;
-  margin-bottom: 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 60px;
+  flex-wrap: wrap;
 }
 
-.feedback-section-left .feedback-btn {
-  background: #28a745;
-  color: #fff;
-  font-weight: 500;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
+/* Date & Time Inputs */
+.date-time-book-centered input[type="date"],
+.date-time-book-centered input[type="time"] {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
   transition: all 0.3s ease;
+  outline: none;
+  background: #fff;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.feedback-section-left .feedback-btn:hover {
-  background: #218838;
+.date-time-book-centered input[type="date"]:hover,
+.date-time-book-centered input[type="time"]:hover {
+  border-color: #4a90e2;
+}
+
+.date-time-book-centered input[type="date"]:focus,
+.date-time-book-centered input[type="time"]:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 6px rgba(74,144,226,0.4);
+}
+
+/* Book Button */
+.date-time-book-centered button {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.date-time-book-centered button:hover {
+  background: linear-gradient(135deg, #218838, #1e7e34);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+}
+
+.date-time-book-centered button:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
 /* Current booking */
@@ -88,72 +123,36 @@
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
+
+.cancel-btn:hover {
+  background-color: #c62828;
+}
+
 .info-note {
   color: #007bff; /* blue info color */
   font-size: 0.95rem;
   margin: 10px 0;
 }
 
-.cancel-btn:hover {
-  background-color: #c62828;
+/* Feedback button fixed bottom-left */
+.feedback-btn-bottom-left {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
 }
 
-/* Booking form: date, time, book button */
-.date-time-book {
-  display: flex;
-  justify-content: center; /* center the group horizontally */
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-/* Date & Time Inputs */
-.date-time-book input[type="date"],
-.date-time-book input[type="time"] {
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  outline: none;
-  background: #fff;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.date-time-book input[type="date"]:hover,
-.date-time-book input[type="time"]:hover {
-  border-color: #4a90e2;
-}
-
-.date-time-book input[type="date"]:focus,
-.date-time-book input[type="time"]:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 6px rgba(74,144,226,0.4);
-}
-
-/* Book Button */
-.date-time-book button {
-  background: linear-gradient(135deg, #28a745, #218838);
-  color: #fff;
-  font-weight: 600;
+.feedback-btn-bottom-left button {
+  background-color: #6c757d;
+  color: white;
   border: none;
-  padding: 10px 22px;
-  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.date-time-book button:hover {
-  background: linear-gradient(135deg, #218838, #1e7e34);
-  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
-}
-
-.date-time-book button:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+.feedback-btn-bottom-left button:hover {
+  background-color: #5a6268;
 }
 
 /* Error message */

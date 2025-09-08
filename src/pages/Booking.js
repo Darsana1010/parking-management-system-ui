@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import "./Booking.css";
 
@@ -15,7 +15,6 @@ function Booking() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // Decode token to get userId
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -31,21 +30,19 @@ function Booking() {
     }
   }, [token, navigate]);
 
-  // Fetch full user details including companyId
   const fetchUserDetails = async (userId, token) => {
     try {
       const response = await axios.get(`http://localhost:8080/api/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(response.data);
-      fetchBookings(response.data.userId); // fetch bookings after user details are fetched
+      fetchBookings(response.data.userId);
     } catch (err) {
       console.error("Error fetching user details", err);
       setError("Failed to load user details");
     }
   };
 
-  // Fetch bookings for this user
   const fetchBookings = async (userId) => {
     try {
       setLoading(true);
@@ -83,7 +80,7 @@ function Booking() {
       await axios.post("/api/bookings", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      fetchBookings(user.userId); // refresh bookings
+      fetchBookings(user.userId);
     } catch (err) {
       setError(err.response?.data || "Booking failed");
     }
@@ -94,7 +91,7 @@ function Booking() {
       await axios.post(`/api/bookings/${id}/cancel`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      fetchBookings(user.userId); // refresh bookings
+      fetchBookings(user.userId);
     } catch (err) {
       setError("Cancel failed");
     }
@@ -112,12 +109,9 @@ function Booking() {
         <h2>My Booking</h2>
         <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
-      <p className="info-note">
-        ⚠ You cannot book for the same date.
-      </p>
-            <p className="info-note">
-        ⚠ You can only book for the next two days.
-      </p>
+
+      <p className="info-note">⚠ You cannot book for the same date.</p>
+      <p className="info-note">⚠ You can only book for the next two days.</p>
 
       {loading ? (
         <p>Loading...</p>
@@ -130,7 +124,7 @@ function Booking() {
           <button className="cancel-btn" onClick={() => cancelBooking(myBooking.bookingId)}>Cancel Booking</button>
         </div>
       ) : (
-        <div className="date-time-book">
+        <div className="date-time-book-centered">
           <input
             type="date"
             value={bookingDate}
@@ -144,6 +138,11 @@ function Booking() {
           <button onClick={createBooking}>Book</button>
         </div>
       )}
+
+      {/* Feedback button always visible */}
+      <div className="feedback-btn-bottom-left">
+        <button onClick={() => navigate("/feedback")}>💬 Feedback</button>
+      </div>
 
       {error && <p className="error-msg">{error}</p>}
     </div>
