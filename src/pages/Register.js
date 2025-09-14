@@ -37,7 +37,23 @@ const Register = () => {
   }, []);
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+
+    // Clear irrelevant fields when switching to Admin
+    if (name === 'role' && value === 'Admin') {
+      setFormData(prev => ({
+        ...prev,
+        role: value,
+        employerId: '',
+        vehicleNumber: '',
+        companyId: ''
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const validateEmail = (email) => {
@@ -50,31 +66,49 @@ const Register = () => {
     return re.test(phone);
   };
 
+  const validatePassword = (password) => {
+    const re = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+    return re.test(password);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Mandatory fields check
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.password ||
-      !formData.role ||
-      !formData.companyId ||
-      !formData.phoneNumber ||
-      !formData.vehicleNumber ||
-      !formData.employerId
-    ) {
+    const {
+      name,
+      email,
+      password,
+      phoneNumber,
+      role,
+      employerId,
+      vehicleNumber,
+      companyId
+    } = formData;
+
+    if (!name || !email || !password || !phoneNumber || !role) {
       setError('Please fill all mandatory fields.');
       return;
     }
 
-    if (!validateEmail(formData.email)) {
+    if (role !== 'Admin' && (!employerId || !vehicleNumber || !companyId)) {
+      setError('Please fill all mandatory fields.');
+      return;
+    }
+
+    if (!validateEmail(email)) {
       setError('Please enter a valid email address.');
       return;
     }
 
-    if (!validatePhone(formData.phoneNumber)) {
+    if (!validatePhone(phoneNumber)) {
       setError('Please enter a valid 10-digit phone number.');
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setError(
+        'Password must be at least 6 characters long and include at least one uppercase letter, one number, and one special character.'
+      );
       return;
     }
 
@@ -135,38 +169,50 @@ const Register = () => {
           required
         />
 
-        <input
-          type="text"
-          name="employerId"
-          placeholder="Employer ID"
-          value={formData.employerId}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="text"
-          name="vehicleNumber"
-          placeholder="Vehicle Number"
-          value={formData.vehicleNumber}
-          onChange={handleChange}
-          required
-        />
-
         <select name="role" value={formData.role} onChange={handleChange} required>
           <option value="">Select Role</option>
           <option value="User">User</option>
           <option value="Admin">Admin</option>
         </select>
 
-        <select name="companyId" value={formData.companyId} onChange={handleChange} required>
-          <option value="">Select Company</option>
-          {companies.map(company => (
-            <option key={company.companyId} value={company.companyId}>
-              {company.companyName}
-            </option>
-          ))}
-        </select>
+        {/* Show these fields only if role is not Admin */}
+        {formData.role !== 'Admin' && (
+          <>
+            <input
+              type="text"
+              name="employerId"
+              placeholder="Employer ID"
+              value={formData.employerId}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              type="text"
+              name="vehicleNumber"
+              placeholder="Vehicle Number"
+              value={formData.vehicleNumber}
+              onChange={handleChange}
+              required
+            />
+
+            <select
+              name="companyId"
+              value={formData.companyId}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Company</option>
+              {companies
+                .filter(company => formData.role !== 'User' || company.companyId !== 1)
+                .map(company => (
+                  <option key={company.companyId} value={company.companyId}>
+                    {company.companyName}
+                  </option>
+                ))}
+            </select>
+          </>
+        )}
 
         <button type="submit">Register</button>
       </form>

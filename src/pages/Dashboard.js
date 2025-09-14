@@ -189,11 +189,17 @@ const Dashboard = () => {
 
           {user.role === 'Admin' && (
             <div className="admin-actions">
-              <button className="admin-btn" onClick={() => navigate('/admin-dashboard')}>View All Bookings</button>
-                  <button className="admin-btn" onClick={() => navigate('/pending-users')}>Pending Users</button>
-              <button className="admin-btn" onClick={() => navigate('/companies')}>Manage Companies</button>
-              <button className="admin-btn" onClick={() => navigate("/admin-feedback")}>View Feedbacks</button>
-               <button className="admin-btn" onClick={() => navigate('/reports')}>View Reports</button>
+              <button className="admin-btn" onClick={() => navigate('/admin-dashboard')}disabled={user.registrationStatus !== 'Approved'}>View All Bookings</button>
+                  <button className="admin-btn" onClick={() => navigate('/pending-users')}disabled={user.registrationStatus !== 'Approved'}>Pending Users</button>
+              <button className="admin-btn" onClick={() => navigate('/companies')} disabled={user.registrationStatus !== 'Approved'}>Manage Companies</button>
+              <button className="admin-btn" onClick={() => navigate("/admin-feedback")} disabled={user.registrationStatus !== 'Approved'}>View Feedbacks</button>
+               <button className="admin-btn" onClick={() => navigate('/reports')}disabled={user.registrationStatus !== 'Approved'}>View Reports</button>
+
+                   {user.registrationStatus !== 'Approved' && (
+      <p className="not-approved-message">
+        ⚠️ Your admin account is not approved yet. Admin features are disabled.
+      </p>
+    )}
             </div>
           )}
 

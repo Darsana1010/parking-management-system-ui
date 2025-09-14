@@ -343,7 +343,15 @@ body {
 }
 
 .cancel-btn:hover { background: rgba(255,255,255,0.04); }
-
+.admin-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.not-approved-message {
+  color: #c0392b;
+  font-style: italic;
+  margin-top: 10px;
+}
 /* Logout button top right */
 .logout-button {
   position: absolute;
